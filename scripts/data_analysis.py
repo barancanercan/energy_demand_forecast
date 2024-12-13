@@ -14,7 +14,7 @@ pd.set_option('display.width', 500)
 
 
 # Dosya yolları
-RAW_DATA_DIR = "../data/raw/"
+RAW_DATA_DIR = "./data/raw/"
 ENERGY_DATA_FILE = os.path.join(RAW_DATA_DIR, "energy_dataset.csv")
 WEATHER_DATA_FILE = os.path.join(RAW_DATA_DIR, "weather_features.csv")
 
