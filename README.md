@@ -1,13 +1,13 @@
-
 # Energy Demand Forecasting Project
 
-This repository provides a complete solution for forecasting energy demand and prices using historical data on energy production, consumption, and weather conditions. The project is built with Python and incorporates machine learning models, feature engineering, and deployment through a FastAPI-based web service.
+This repository provides a comprehensive solution for forecasting energy demand and prices using historical data on energy production, consumption, and weather conditions. The project combines Python-based machine learning models with a modern web interface powered by Next.js and TailwindCSS.
 
 ## Features
 - **Data Processing**: Handles missing values, outliers, and performs feature engineering.
 - **Model Development**: Utilizes RandomForest and XGBoost models with hyperparameter tuning.
 - **Time Series Analysis**: Includes SARIMA for seasonal decomposition and forecasting.
 - **Deployment**: Provides a FastAPI-based RESTful API for live predictions.
+- **Web Application**: An intuitive and sleek user interface for interacting with prediction models.
 
 ## Project Structure
 ```
@@ -16,16 +16,23 @@ This repository provides a complete solution for forecasting energy demand and p
 │   ├── raw               # Raw energy and weather datasets
 │   ├── processed         # Processed datasets
 ├── models                # Saved models
-├── scripts               # All Python scripts
+├── scripts               # Backend Python scripts
 │   ├── preprocess.py     # Data cleaning and feature engineering
 │   ├── train.py          # Training and saving models
 │   ├── test.py           # Testing trained models
 │   ├── app.py            # FastAPI application
+├── energy-prediction-app # Frontend Next.js application
+│   ├── src/app           # Next.js pages and components
+│   ├── public            # Static assets
+│   ├── styles            # Global CSS and Tailwind configuration
 ├── encoders              # Saved encoders and scalers
-└── README.md             # Project documentation
+├── README.md             # Project documentation
+└── LICENSE               # License file
 ```
 
 ## Installation
+
+### Backend Setup
 1. Clone the repository:
    ```bash
    git clone https://github.com/your-repository/energy-demand-forecasting.git
@@ -48,12 +55,30 @@ This repository provides a complete solution for forecasting energy demand and p
    python scripts/train.py
    ```
 
-5. Run the API:
+5. Start the FastAPI backend:
    ```bash
    uvicorn scripts.app:app --reload
    ```
 
 6. Access the API at `http://127.0.0.1:8000/docs`.
+
+### Frontend Setup
+1. Navigate to the `energy-prediction-app` directory:
+   ```bash
+   cd energy-prediction-app
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Start the Next.js development server:
+   ```bash
+   npm run dev
+   ```
+
+4. Access the web application at `http://localhost:3000`.
 
 ## Usage
 ### API Endpoints
@@ -92,6 +117,12 @@ This repository provides a complete solution for forecasting energy demand and p
     "prediction": 26500.3
 }
 ```
+
+### Frontend
+The web application provides:
+1. **Home Page**: Introduction to the energy forecasting tool.
+2. **Prediction Form**: Interactive form for submitting data to generate predictions.
+3. **Results Display**: Displays the prediction result or errors in a user-friendly manner.
 
 ## Contributing
 Feel free to fork this repository and submit pull requests. For major changes, please open an issue first to discuss your ideas.
