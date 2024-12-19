@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import os
 
 import joblib
@@ -5,6 +6,14 @@ import pandas as pd
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, validator
+=======
+from fastapi import FastAPI, HTTPException, Depends
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, validator, Field
+import joblib
+import pandas as pd
+import os
+>>>>>>> 0a8cd4ce9a1540d36467328972bb58442e644d11
 
 app = FastAPI()
 
@@ -22,10 +31,14 @@ MODEL_DIR = "./models/"
 TRAINED_MODEL_FILE = os.path.join(MODEL_DIR, "trained_model.pkl")
 
 # Eğitimli modeli yükle
+<<<<<<< HEAD
 trained_model = (
     joblib.load(TRAINED_MODEL_FILE) if os.path.exists(TRAINED_MODEL_FILE) else None
 )
 
+=======
+trained_model = joblib.load(TRAINED_MODEL_FILE) if os.path.exists(TRAINED_MODEL_FILE) else None
+>>>>>>> 0a8cd4ce9a1540d36467328972bb58442e644d11
 
 # Giriş için gelişmiş veri modeli
 class PredictionRequest(BaseModel):
@@ -51,6 +64,7 @@ class PredictionRequest(BaseModel):
     season: int = Field(..., ge=0, le=3)
 
     # Özel doğrulama
+<<<<<<< HEAD
     @validator("is_weekend")
     def validate_weekend(cls, v):
         if v not in [0, 1]:
@@ -58,6 +72,14 @@ class PredictionRequest(BaseModel):
         return v
 
 
+=======
+    @validator('is_weekend')
+    def validate_weekend(cls, v):
+        if v not in [0, 1]:
+            raise ValueError('is_weekend sadece 0 veya 1 olabilir')
+        return v
+
+>>>>>>> 0a8cd4ce9a1540d36467328972bb58442e644d11
 @app.get("/")
 def home():
     """
@@ -65,7 +87,10 @@ def home():
     """
     return {"message": "Enerji Tahmin API'sine Hoş Geldiniz!"}
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0a8cd4ce9a1540d36467328972bb58442e644d11
 @app.post("/predict")
 def predict(request: PredictionRequest):
     """
@@ -87,4 +112,8 @@ def predict(request: PredictionRequest):
 
         return {"prediction": float(prediction)}
     except Exception as e:
+<<<<<<< HEAD
         raise HTTPException(status_code=400, detail=str(e))
+=======
+        raise HTTPException(status_code=400, detail=str(e))
+>>>>>>> 0a8cd4ce9a1540d36467328972bb58442e644d11

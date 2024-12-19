@@ -1,17 +1,32 @@
+<<<<<<< HEAD
 import os
 import warnings
 from datetime import datetime
 
 import numpy as np
 import pandas as pd
+=======
+import warnings
+import pandas as pd
+import numpy as np
+import os
+from datetime import datetime
+>>>>>>> 0a8cd4ce9a1540d36467328972bb58442e644d11
 
 # Tüm uyarıları kapat
 warnings.filterwarnings("ignore")
 
+<<<<<<< HEAD
 pd.set_option("display.max_columns", None)
 pd.set_option("display.max_rows", None)
 pd.set_option("display.float_format", lambda x: "%.3f" % x)
 pd.set_option("display.width", 500)
+=======
+pd.set_option('display.max_columns', None)
+pd.set_option('display.max_rows', None)
+pd.set_option('display.float_format', lambda x: '%.3f' % x)
+pd.set_option('display.width', 500)
+>>>>>>> 0a8cd4ce9a1540d36467328972bb58442e644d11
 
 # Dosya yolları
 RAW_DATA_DIR = "./data/raw/"
@@ -19,7 +34,10 @@ PROCESSED_DATA_DIR = "./data/processed/"
 ENERGY_DATA_FILE = os.path.join(RAW_DATA_DIR, "energy_dataset.csv")
 WEATHER_DATA_FILE = os.path.join(RAW_DATA_DIR, "weather_features.csv")
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0a8cd4ce9a1540d36467328972bb58442e644d11
 def load_data():
     """
     Verileri yükler ve DataFrame olarak döndürür.
@@ -45,19 +63,31 @@ def handle_missing_values(df, threshold=0.5):
     print(f"Orijinal veri boyutu: {df.shape}")
 
     # Tamamen eksik sütunları kaldır
+<<<<<<< HEAD
     df = df.dropna(axis=1, how="all")
+=======
+    df = df.dropna(axis=1, how='all')
+>>>>>>> 0a8cd4ce9a1540d36467328972bb58442e644d11
 
     # Eksik satırları kaldır (eğer oran çok düşükse)
     df = df.dropna(axis=0, thresh=int(df.shape[1] * threshold))
 
     # Eksik değerleri uygun bir şekilde doldur
+<<<<<<< HEAD
     df.fillna(method="ffill", inplace=True)  # İleri doldurma (forward fill)
     df.fillna(method="bfill", inplace=True)  # Geri doldurma (backward fill)
+=======
+    df.fillna(method='ffill', inplace=True)  # İleri doldurma (forward fill)
+    df.fillna(method='bfill', inplace=True)  # Geri doldurma (backward fill)
+>>>>>>> 0a8cd4ce9a1540d36467328972bb58442e644d11
 
     print(f"İşlem sonrası veri boyutu: {df.shape}")
     return df
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0a8cd4ce9a1540d36467328972bb58442e644d11
 def create_new_features(df):
     """
     Yeni özellikler türetir.
@@ -71,6 +101,7 @@ def create_new_features(df):
     print("Yeni özellikler türetiliyor...")
 
     # Tarih bilgisi içeren sütunu datetime formatına çevir
+<<<<<<< HEAD
     if "time" in df.columns:
         df["time"] = pd.to_datetime(df["time"], utc=True)
         df["hour"] = df["time"].dt.hour  # Saat bilgisi
@@ -83,6 +114,20 @@ def create_new_features(df):
     # Enerji üretim yüzdeleri
     if "total load actual" in df.columns:
         generation_cols = [col for col in df.columns if "generation" in col]
+=======
+    if 'time' in df.columns:
+        df['time'] = pd.to_datetime(df['time'], utc=True)
+        df['hour'] = df['time'].dt.hour  # Saat bilgisi
+        df['day_of_week'] = df['time'].dt.dayofweek  # Haftanın günü
+        df['month'] = df['time'].dt.month  # Ay bilgisi
+        df['year'] = df['time'].dt.year  # Yıl bilgisi
+        df['is_weekend'] = df['time'].dt.dayofweek >= 5  # Hafta sonu mu?
+        df['season'] = df['month'].apply(assign_season)  # Mevsim bilgisi
+
+    # Enerji üretim yüzdeleri
+    if 'total load actual' in df.columns:
+        generation_cols = [col for col in df.columns if 'generation' in col]
+>>>>>>> 0a8cd4ce9a1540d36467328972bb58442e644d11
         total_generation = df[generation_cols].sum(axis=1)
         for col in generation_cols:
             df[f"{col}_percentage"] = (df[col] / total_generation).fillna(0) * 100
@@ -109,7 +154,11 @@ def detect_and_handle_outliers(df):
     Aykırı değerleri tespit eder ve işleme alır.
     """
     print("Aykırı değerler tespit ediliyor...")
+<<<<<<< HEAD
     numeric_cols = df.select_dtypes(include=["float64", "int64"]).columns
+=======
+    numeric_cols = df.select_dtypes(include=['float64', 'int64']).columns
+>>>>>>> 0a8cd4ce9a1540d36467328972bb58442e644d11
 
     for col in numeric_cols:
         q1 = df[col].quantile(0.25)
@@ -125,12 +174,19 @@ def detect_and_handle_outliers(df):
     print("Aykırı değer işlemleri tamamlandı.")
     return df
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0a8cd4ce9a1540d36467328972bb58442e644d11
 def outlier_summary(df):
     """
     Aykırı değerlerin sütun bazında sayısını hesaplar.
     """
+<<<<<<< HEAD
     numeric_cols = df.select_dtypes(include=["float64", "int64"]).columns
+=======
+    numeric_cols = df.select_dtypes(include=['float64', 'int64']).columns
+>>>>>>> 0a8cd4ce9a1540d36467328972bb58442e644d11
     outlier_counts = {}
 
     for col in numeric_cols:
@@ -145,10 +201,16 @@ def outlier_summary(df):
         outlier_counts[col] = outliers
 
     # Sonuçları bir DataFrame olarak döndür
+<<<<<<< HEAD
     outlier_summary_df = pd.DataFrame(
         list(outlier_counts.items()), columns=["Column", "Outlier Count"]
     )
     return outlier_summary_df.sort_values(by="Outlier Count", ascending=False)
+=======
+    outlier_summary_df = pd.DataFrame(list(outlier_counts.items()), columns=['Column', 'Outlier Count'])
+    return outlier_summary_df.sort_values(by='Outlier Count', ascending=False)
+
+>>>>>>> 0a8cd4ce9a1540d36467328972bb58442e644d11
 
 
 def save_processed_data(df, file_name):
@@ -199,6 +261,7 @@ def main():
     # Sadeleştirilmiş tabloyu göster
     print("\n=== İşlenmiş Veri Çerçeveleri (Sadeleştirilmiş Görünüm) ===")
     selected_energy_cols = [
+<<<<<<< HEAD
         "time",
         "generation biomass",
         "generation fossil gas",
@@ -213,21 +276,38 @@ def main():
         "wind_speed",
         "weather_main",
         "weather_description",
+=======
+        'time', 'generation biomass', 'generation fossil gas',
+        'generation nuclear', 'total load actual', 'price actual'
+    ]
+    selected_weather_cols = [
+        'dt_iso', 'temp', 'humidity', 'wind_speed',
+        'weather_main', 'weather_description'
+>>>>>>> 0a8cd4ce9a1540d36467328972bb58442e644d11
     ]
 
     simplified_energy_data = energy_data[selected_energy_cols].head()
     simplified_weather_data = weather_data[selected_weather_cols].head()
 
     combined_df = pd.concat(
+<<<<<<< HEAD
         [
             simplified_energy_data.reset_index(drop=True),
             simplified_weather_data.reset_index(drop=True),
         ],
         axis=1,
+=======
+        [simplified_energy_data.reset_index(drop=True),
+         simplified_weather_data.reset_index(drop=True)], axis=1
+>>>>>>> 0a8cd4ce9a1540d36467328972bb58442e644d11
     )
 
     print(combined_df.to_string(index=False))
 
 
 if __name__ == "__main__":
+<<<<<<< HEAD
     main()
+=======
+    main()
+>>>>>>> 0a8cd4ce9a1540d36467328972bb58442e644d11

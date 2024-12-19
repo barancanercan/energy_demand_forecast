@@ -1,5 +1,8 @@
 import os
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0a8cd4ce9a1540d36467328972bb58442e644d11
 import joblib
 import pandas as pd
 
@@ -14,9 +17,13 @@ def load_trained_model():
     Eğitilmiş modeli yükler ve eğitim sırasında kullanılan özellikleri kontrol eder.
     """
     if not os.path.exists(TRAINED_MODEL_FILE):
+<<<<<<< HEAD
         raise FileNotFoundError(
             f"Eğitilmiş model dosyası bulunamadı: {TRAINED_MODEL_FILE}"
         )
+=======
+        raise FileNotFoundError(f"Eğitilmiş model dosyası bulunamadı: {TRAINED_MODEL_FILE}")
+>>>>>>> 0a8cd4ce9a1540d36467328972bb58442e644d11
     model = joblib.load(TRAINED_MODEL_FILE)
     print(f"Eğitilmiş model yüklendi: {TRAINED_MODEL_FILE}")
     return model
@@ -79,7 +86,11 @@ def main():
             "day_of_week": 2,
             "month": 12,
             "is_weekend": 0,
+<<<<<<< HEAD
             "season": 3,
+=======
+            "season": 3
+>>>>>>> 0a8cd4ce9a1540d36467328972bb58442e644d11
         }
 
         # Tahmin yap
@@ -91,3 +102,8 @@ def main():
 
 if __name__ == "__main__":
     main()
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 0a8cd4ce9a1540d36467328972bb58442e644d11

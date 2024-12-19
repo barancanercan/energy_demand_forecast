@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import os
 import warnings
 
@@ -14,6 +15,23 @@ from xgboost import XGBRegressor
 
 # MLflow izleme URI'sını ayarlayın
 mlflow.set_tracking_uri("http://localhost:5000")
+=======
+import pandas as pd
+import os
+from sklearn.ensemble import RandomForestRegressor
+from xgboost import XGBRegressor
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error, r2_score
+import joblib
+import warnings
+import mlflow
+import mlflow.sklearn
+from mlflow.models.signature import infer_signature
+
+# MLflow izleme URI'sını ayarlayın
+mlflow.set_tracking_uri('http://localhost:5000')
+>>>>>>> 0a8cd4ce9a1540d36467328972bb58442e644d11
 
 # Uyarıları kapatma
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -36,12 +54,17 @@ def load_data(file_path):
         raise FileNotFoundError(f"Veri dosyası bulunamadı: {file_path}")
     energy_data = pd.read_csv(file_path)
     if "total load actual" not in energy_data.columns:
+<<<<<<< HEAD
         raise ValueError(
             "Beklenen hedef değişken 'total load actual' veri setinde bulunamadı."
         )
     X = energy_data.drop(
         columns=["total load actual", "price actual", "time"], errors="ignore"
     )
+=======
+        raise ValueError("Beklenen hedef değişken 'total load actual' veri setinde bulunamadı.")
+    X = energy_data.drop(columns=["total load actual", "price actual", "time"], errors="ignore")
+>>>>>>> 0a8cd4ce9a1540d36467328972bb58442e644d11
     y = energy_data["total load actual"]
     return X, y
 
@@ -50,9 +73,13 @@ def train_and_log_model(model, model_name, X, y):
     """
     Modeli eğit ve MLflow ile kaydet.
     """
+<<<<<<< HEAD
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=42
     )
+=======
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+>>>>>>> 0a8cd4ce9a1540d36467328972bb58442e644d11
 
     # MLflow deneyi başlatma
     with mlflow.start_run():
@@ -87,11 +114,17 @@ def main():
 
         # Modelleri dene
         models = {
+<<<<<<< HEAD
             "RandomForestRegressor": RandomForestRegressor(
                 n_estimators=100, random_state=42
             ),
             "XGBRegressor": XGBRegressor(n_estimators=100, random_state=42),
             "LinearRegression": LinearRegression(),
+=======
+            "RandomForestRegressor": RandomForestRegressor(n_estimators=100, random_state=42),
+            "XGBRegressor": XGBRegressor(n_estimators=100, random_state=42),
+            "LinearRegression": LinearRegression()
+>>>>>>> 0a8cd4ce9a1540d36467328972bb58442e644d11
         }
 
         for model_name, model in models.items():
@@ -102,4 +135,8 @@ def main():
 
 
 if __name__ == "__main__":
+<<<<<<< HEAD
     main()
+=======
+    main()
+>>>>>>> 0a8cd4ce9a1540d36467328972bb58442e644d11

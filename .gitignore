@@ -42,3 +42,4 @@ yarn-error.log*
 # Çevresel Değişkenler ve Diğer Hassas Dosyalar
 .env
 .env.local
+.picture_for_readme.jpeg
