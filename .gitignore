@@ -1,6 +1,7 @@
 # Sanal Ortam
 env/
 venv/
+ENV/
 
 # MLflow
 mlruns/
@@ -8,13 +9,45 @@ mlartifacts/
 
 # Model Dosyaları
 models/
+*.pkl
 
 # IDE ve Sistem Dosyaları
 .idea/
 .vscode/
+*.iml
 .DS_Store
 Thumbs.db
 
-# Log ve Çeşitli Dosyalar
+# Python Derleme Artıkları
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Log Dosyaları
 *.log
+logs/
+
+# Geçici Dosyalar
 *.tmp
+*.bak
+
+# İşletim Sistemi Dosyaları
+*.swp
+*.swo
+*.~lock.*
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ML Kütüphane Dosyaları
+*.so
+*.dll
+*.yaml
+
+# Diğer
+.env
+.env.local
