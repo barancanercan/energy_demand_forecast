@@ -38,10 +38,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Diğer
+# Çevresel Değişkenler ve Diğer Hassas Dosyalar
 .env
 .env.local
-env/
-*.so
-env/
-*.so
