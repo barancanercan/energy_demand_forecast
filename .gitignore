@@ -1,0 +1,20 @@
+# Sanal Ortam
+env/
+venv/
+
+# MLflow
+mlruns/
+mlartifacts/
+
+# Model Dosyaları
+models/
+
+# IDE ve Sistem Dosyaları
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Log ve Çeşitli Dosyalar
+*.log
+*.tmp
