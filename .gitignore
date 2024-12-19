@@ -1,6 +1,7 @@
 # Sanal Ortam ve Büyük Dosyalar
 env/
 venv/
+.idea
 
 # Veri Dosyaları
 data/raw/
