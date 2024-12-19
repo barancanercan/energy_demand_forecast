@@ -1,0 +1,72 @@
+artifact_path: model
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.12.3
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.6.0
+mlflow_version: 2.19.0
+model_size_bytes: 473627
+model_uuid: e41e2585db59433580196d50380a3fcf
+run_id: f26827cffc1f4793942b5d0cee686ae9
+signature:
+  inputs: '[{"type": "double", "name": "generation biomass", "required": true}, {"type":
+    "double", "name": "generation fossil brown coal/lignite", "required": true}, {"type":
+    "double", "name": "generation fossil coal-derived gas", "required": true}, {"type":
+    "double", "name": "generation fossil gas", "required": true}, {"type": "double",
+    "name": "generation fossil hard coal", "required": true}, {"type": "double", "name":
+    "generation fossil oil", "required": true}, {"type": "double", "name": "generation
+    fossil oil shale", "required": true}, {"type": "double", "name": "generation fossil
+    peat", "required": true}, {"type": "double", "name": "generation geothermal",
+    "required": true}, {"type": "double", "name": "generation hydro pumped storage
+    consumption", "required": true}, {"type": "double", "name": "generation hydro
+    run-of-river and poundage", "required": true}, {"type": "double", "name": "generation
+    hydro water reservoir", "required": true}, {"type": "double", "name": "generation
+    marine", "required": true}, {"type": "double", "name": "generation nuclear", "required":
+    true}, {"type": "double", "name": "generation other", "required": true}, {"type":
+    "double", "name": "generation other renewable", "required": true}, {"type": "double",
+    "name": "generation solar", "required": true}, {"type": "double", "name": "generation
+    waste", "required": true}, {"type": "double", "name": "generation wind offshore",
+    "required": true}, {"type": "double", "name": "generation wind onshore", "required":
+    true}, {"type": "double", "name": "forecast solar day ahead", "required": true},
+    {"type": "double", "name": "forecast wind onshore day ahead", "required": true},
+    {"type": "double", "name": "total load forecast", "required": true}, {"type":
+    "double", "name": "price day ahead", "required": true}, {"type": "double", "name":
+    "hour", "required": true}, {"type": "double", "name": "day_of_week", "required":
+    true}, {"type": "double", "name": "month", "required": true}, {"type": "double",
+    "name": "year", "required": true}, {"type": "boolean", "name": "is_weekend", "required":
+    true}, {"type": "double", "name": "generation biomass_percentage", "required":
+    true}, {"type": "double", "name": "generation fossil brown coal/lignite_percentage",
+    "required": true}, {"type": "double", "name": "generation fossil coal-derived
+    gas_percentage", "required": true}, {"type": "double", "name": "generation fossil
+    gas_percentage", "required": true}, {"type": "double", "name": "generation fossil
+    hard coal_percentage", "required": true}, {"type": "double", "name": "generation
+    fossil oil_percentage", "required": true}, {"type": "double", "name": "generation
+    fossil oil shale_percentage", "required": true}, {"type": "double", "name": "generation
+    fossil peat_percentage", "required": true}, {"type": "double", "name": "generation
+    geothermal_percentage", "required": true}, {"type": "double", "name": "generation
+    hydro pumped storage consumption_percentage", "required": true}, {"type": "double",
+    "name": "generation hydro run-of-river and poundage_percentage", "required": true},
+    {"type": "double", "name": "generation hydro water reservoir_percentage", "required":
+    true}, {"type": "double", "name": "generation marine_percentage", "required":
+    true}, {"type": "double", "name": "generation nuclear_percentage", "required":
+    true}, {"type": "double", "name": "generation other_percentage", "required": true},
+    {"type": "double", "name": "generation other renewable_percentage", "required":
+    true}, {"type": "double", "name": "generation solar_percentage", "required": true},
+    {"type": "double", "name": "generation waste_percentage", "required": true}, {"type":
+    "double", "name": "generation wind offshore_percentage", "required": true}, {"type":
+    "double", "name": "generation wind onshore_percentage", "required": true}, {"type":
+    "double", "name": "season_Fall", "required": true}, {"type": "double", "name":
+    "season_Spring", "required": true}, {"type": "double", "name": "season_Summer",
+    "required": true}, {"type": "double", "name": "season_Winter", "required": true}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "float32", "shape": [-1]}}]'
+  params: null
+utc_time_created: '2024-12-19 11:12:54.281108'

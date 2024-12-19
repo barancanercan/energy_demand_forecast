@@ -2,8 +2,17 @@ import pandas as pd
 import os
 from sklearn.ensemble import RandomForestRegressor
 from xgboost import XGBRegressor
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error, r2_score
 import joblib
 import warnings
+import mlflow
+import mlflow.sklearn
+from mlflow.models.signature import infer_signature
+
+# MLflow izleme URI'sını ayarlayın
+mlflow.set_tracking_uri('http://localhost:5000')
 
 # Uyarıları kapatma
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -13,8 +22,6 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 PROCESSED_DATA_DIR = "./data/processed/"
 ENERGY_DATA_FILE = PROCESSED_DATA_DIR + "final_energy_data.csv"
 BEST_MODEL_DIR = "./models/"
-BEST_MODEL_FILE = os.path.join(BEST_MODEL_DIR, "XGBoost_best_model.pkl")
-TRAINED_MODEL_FILE = os.path.join(BEST_MODEL_DIR, "trained_model.pkl")
 
 # Klasör oluşturma
 os.makedirs(BEST_MODEL_DIR, exist_ok=True)
@@ -34,28 +41,36 @@ def load_data(file_path):
     return X, y
 
 
-def load_best_model():
+def train_and_log_model(model, model_name, X, y):
     """
-    En iyi modeli yükle.
+    Modeli eğit ve MLflow ile kaydet.
     """
-    if not os.path.exists(BEST_MODEL_FILE):
-        raise FileNotFoundError(f"En iyi model dosyası bulunamadı: {BEST_MODEL_FILE}")
-    model = joblib.load(BEST_MODEL_FILE)
-    print(f"En iyi model yüklendi: {BEST_MODEL_FILE}")
-    return model
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
+    # MLflow deneyi başlatma
+    with mlflow.start_run():
+        # Modeli eğit
+        model.fit(X_train, y_train)
 
-def train_and_save_model(model, X, y):
-    """
-    Verilen modelle tam veri üzerinde eğitimi yap ve modeli kaydet.
-    """
-    print("Model eğitimi başlatılıyor...")
-    model.fit(X, y)
-    print("Model eğitimi tamamlandı.")
+        # Tahminler ve metrikler
+        predictions = model.predict(X_test)
+        mse = mean_squared_error(y_test, predictions)
+        r2 = r2_score(y_test, predictions)
 
-    # Eğitilen modeli kaydet
-    joblib.dump(model, TRAINED_MODEL_FILE)
-    print(f"Eğitilen model kaydedildi: {TRAINED_MODEL_FILE}")
+        # Modeli kaydet
+        trained_model_file = os.path.join(BEST_MODEL_DIR, f"{model_name}_model.pkl")
+        joblib.dump(model, trained_model_file)
+        print(f"Eğitilen model kaydedildi: {trained_model_file}")
+
+        # MLflow ile modeli kaydet
+        signature = infer_signature(X_test, predictions)
+        mlflow.sklearn.log_model(model, "model", signature=signature)
+        print(f"Model MLflow ile kaydedildi: {model_name}")
+
+        # Parametreleri ve metrikleri kaydet
+        mlflow.log_param("model_type", model_name)
+        mlflow.log_metric("mse", mse)
+        mlflow.log_metric("r2_score", r2)
 
 
 def main():
@@ -63,11 +78,15 @@ def main():
         # Veriyi yükle
         X, y = load_data(ENERGY_DATA_FILE)
 
-        # En iyi modeli yükle
-        best_model = load_best_model()
+        # Modelleri dene
+        models = {
+            "RandomForestRegressor": RandomForestRegressor(n_estimators=100, random_state=42),
+            "XGBRegressor": XGBRegressor(n_estimators=100, random_state=42),
+            "LinearRegression": LinearRegression()
+        }
 
-        # Modeli eğit ve kaydet
-        train_and_save_model(best_model, X, y)
+        for model_name, model in models.items():
+            train_and_log_model(model, model_name, X, y)
 
     except Exception as e:
         print(f"Bir hata oluştu: {e}")

@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/995f0d8eabf2445689e8d3377535f58e/artifacts
+end_time: 1734606255637
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 995f0d8eabf2445689e8d3377535f58e
+run_name: dapper-mare-318
+run_uuid: 995f0d8eabf2445689e8d3377535f58e
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1734606247044
+status: 3
+tags: []
+user_id: baran
