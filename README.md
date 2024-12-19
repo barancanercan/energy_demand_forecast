@@ -1,12 +1,10 @@
-<<<<<<< HEAD
+
 ![Energy Demand Forecasting Visualization](picture_for_readme.jpeg)
 
 # Energy Demand Forecasting Project
-...
-=======
+
 
 ### Energy Demand Forecasting Project
->>>>>>> 0a8cd4ce9a1540d36467328972bb58442e644d11
 
 This repository provides a comprehensive solution for forecasting energy demand and prices using historical data on energy production, consumption, and weather conditions. The project combines Python-based machine learning models with MLflow integration for experiment tracking and a modern web interface powered by Next.js and TailwindCSS.
 
