@@ -1,9 +1,10 @@
-from fastapi import FastAPI, HTTPException, Depends
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, validator, Field
+import os
+
 import joblib
 import pandas as pd
-import os
+from fastapi import Depends, FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, Field, validator
 
 app = FastAPI()
 
@@ -21,7 +22,10 @@ MODEL_DIR = "./models/"
 TRAINED_MODEL_FILE = os.path.join(MODEL_DIR, "trained_model.pkl")
 
 # Eğitimli modeli yükle
-trained_model = joblib.load(TRAINED_MODEL_FILE) if os.path.exists(TRAINED_MODEL_FILE) else None
+trained_model = (
+    joblib.load(TRAINED_MODEL_FILE) if os.path.exists(TRAINED_MODEL_FILE) else None
+)
+
 
 # Giriş için gelişmiş veri modeli
 class PredictionRequest(BaseModel):
@@ -47,11 +51,12 @@ class PredictionRequest(BaseModel):
     season: int = Field(..., ge=0, le=3)
 
     # Özel doğrulama
-    @validator('is_weekend')
+    @validator("is_weekend")
     def validate_weekend(cls, v):
         if v not in [0, 1]:
-            raise ValueError('is_weekend sadece 0 veya 1 olabilir')
+            raise ValueError("is_weekend sadece 0 veya 1 olabilir")
         return v
+
 
 @app.get("/")
 def home():
@@ -59,6 +64,7 @@ def home():
     Ana sayfa rotası.
     """
     return {"message": "Enerji Tahmin API'sine Hoş Geldiniz!"}
+
 
 @app.post("/predict")
 def predict(request: PredictionRequest):

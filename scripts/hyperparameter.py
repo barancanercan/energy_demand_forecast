@@ -1,12 +1,13 @@
-import pandas as pd
 import os
-import numpy as np
-from sklearn.ensemble import RandomForestRegressor
-from xgboost import XGBRegressor
-from sklearn.model_selection import train_test_split, cross_val_score
-from sklearn.metrics import mean_squared_error
-import joblib
 import warnings
+
+import joblib
+import numpy as np
+import pandas as pd
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error
+from sklearn.model_selection import cross_val_score, train_test_split
+from xgboost import XGBRegressor
 
 # Uyarıları kapatma
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -29,8 +30,12 @@ def load_data(file_path):
         raise FileNotFoundError(f"Veri dosyası bulunamadı: {file_path}")
     energy_data = pd.read_csv(file_path)
     if "total load actual" not in energy_data.columns:
-        raise ValueError("Beklenen hedef değişken 'total load actual' veri setinde bulunamadı.")
-    X = energy_data.drop(columns=["total load actual", "price actual", "time"], errors="ignore")
+        raise ValueError(
+            "Beklenen hedef değişken 'total load actual' veri setinde bulunamadı."
+        )
+    X = energy_data.drop(
+        columns=["total load actual", "price actual", "time"], errors="ignore"
+    )
     y = energy_data["total load actual"]
     return X, y
 
@@ -40,16 +45,16 @@ def custom_xgboost_grid_search(X, y, param_grid):
     XGBoost için manuel grid search
     """
     best_params = None
-    best_score = float('inf')
+    best_score = float("inf")
 
-    for n_estimators in param_grid['n_estimators']:
-        for learning_rate in param_grid['learning_rate']:
-            for max_depth in param_grid['max_depth']:
+    for n_estimators in param_grid["n_estimators"]:
+        for learning_rate in param_grid["learning_rate"]:
+            for max_depth in param_grid["max_depth"]:
                 model = XGBRegressor(
                     n_estimators=n_estimators,
                     learning_rate=learning_rate,
                     max_depth=max_depth,
-                    random_state=42
+                    random_state=42,
                 )
 
                 # Cross-validation skorunu hesapla
@@ -65,14 +70,16 @@ def custom_xgboost_grid_search(X, y, param_grid):
 
                 mse = np.mean(scores)
 
-                print(f"Params - n_est: {n_estimators}, lr: {learning_rate}, depth: {max_depth}, MSE: {mse:.4f}")
+                print(
+                    f"Params - n_est: {n_estimators}, lr: {learning_rate}, depth: {max_depth}, MSE: {mse:.4f}"
+                )
 
                 if mse < best_score:
                     best_score = mse
                     best_params = {
-                        'n_estimators': n_estimators,
-                        'learning_rate': learning_rate,
-                        'max_depth': max_depth
+                        "n_estimators": n_estimators,
+                        "learning_rate": learning_rate,
+                        "max_depth": max_depth,
                     }
 
     return best_params, best_score
@@ -83,6 +90,7 @@ def _custom_kfold(X, n_splits=3):
     Manuel K-Fold cross-validation için yardımcı fonksiyon
     """
     from sklearn.model_selection import KFold
+
     kf = KFold(n_splits=n_splits, shuffle=True, random_state=42)
     return kf.split(X)
 
@@ -92,7 +100,9 @@ def hyperparameter_optimization(X, y):
     Birkaç model ve parametre üzerinde hiperparametre optimizasyonu yapar.
     """
     # Eğitim ve doğrulama setlerini ayır
-    X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
+    X_train, X_val, y_train, y_val = train_test_split(
+        X, y, test_size=0.2, random_state=42
+    )
 
     # Model ve parametre listesi
     from sklearn.model_selection import GridSearchCV
@@ -101,13 +111,13 @@ def hyperparameter_optimization(X, y):
     rf_param_grid = {
         "n_estimators": [50, 100, 200],
         "max_depth": [10, 20, 30],
-        "min_samples_split": [2, 5, 10]
+        "min_samples_split": [2, 5, 10],
     }
 
     xgb_param_grid = {
         "learning_rate": [0.01, 0.1, 0.2],
         "n_estimators": [50, 100, 200],
-        "max_depth": [3, 5, 7]
+        "max_depth": [3, 5, 7],
     }
 
     best_model = None
@@ -121,7 +131,7 @@ def hyperparameter_optimization(X, y):
         scoring="neg_mean_squared_error",
         cv=3,
         verbose=1,
-        n_jobs=-1
+        n_jobs=-1,
     )
     grid_search.fit(X_train, y_train)
 
@@ -140,12 +150,11 @@ def hyperparameter_optimization(X, y):
     # XGBoost Manuel Grid Search
     print(f"\n{'=' * 20}\nModel: XGBoost\n{'=' * 20}")
     try:
-        xgb_best_params, xgb_score = custom_xgboost_grid_search(X_train, y_train, xgb_param_grid)
-
-        xgb_model = XGBRegressor(
-            **xgb_best_params,
-            random_state=42
+        xgb_best_params, xgb_score = custom_xgboost_grid_search(
+            X_train, y_train, xgb_param_grid
         )
+
+        xgb_model = XGBRegressor(**xgb_best_params, random_state=42)
         xgb_model.fit(X_train, y_train)
         xgb_val_predictions = xgb_model.predict(X_val)
         xgb_val_score = mean_squared_error(y_val, xgb_val_predictions)
@@ -160,6 +169,7 @@ def hyperparameter_optimization(X, y):
     except Exception as e:
         print(f"XGBoost modeliyle ilgili bir hata oluştu: {e}")
         import traceback
+
         traceback.print_exc()
 
     print(f"\nEn iyi model: {best_model_name} (MSE: {best_score:.4f})")

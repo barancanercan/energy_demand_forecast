@@ -1,8 +1,9 @@
 import os
-import pandas as pd
-from statsmodels.tsa.statespace.sarimax import SARIMAX
+
 import joblib
 import numpy as np
+import pandas as pd
+from statsmodels.tsa.statespace.sarimax import SARIMAX
 
 # Dosya yolları
 PROCESSED_DATA_DIR = "./data/processed/"
@@ -26,10 +27,14 @@ def load_energy_data():
     energy_data = energy_data[["total load actual"]]  # Sadece gerekli sütun
 
     # Eksik değerleri doldur ve zaman serisini yeniden oluştur
-    full_range = pd.date_range(start=energy_data.index.min(), end=energy_data.index.max(), freq="h")
+    full_range = pd.date_range(
+        start=energy_data.index.min(), end=energy_data.index.max(), freq="h"
+    )
     energy_data = energy_data.reindex(full_range)
     energy_data.index.name = "time"
-    energy_data["total load actual"] = energy_data["total load actual"].interpolate(method="time")
+    energy_data["total load actual"] = energy_data["total load actual"].interpolate(
+        method="time"
+    )
     return energy_data
 
 

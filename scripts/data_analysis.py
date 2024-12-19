@@ -1,16 +1,17 @@
-import warnings
-import pandas as pd
-import missingno as msno
 import os
+import warnings
+
 import matplotlib.pyplot as plt
+import missingno as msno
+import pandas as pd
 
 # Tüm uyarıları kapat
 warnings.filterwarnings("ignore")
 
-pd.set_option('display.max_columns', None)
-pd.set_option('display.max_rows', None)
-pd.set_option('display.float_format', lambda x: '%.3f' % x)
-pd.set_option('display.width', 500)
+pd.set_option("display.max_columns", None)
+pd.set_option("display.max_rows", None)
+pd.set_option("display.float_format", lambda x: "%.3f" % x)
+pd.set_option("display.width", 500)
 
 
 # Dosya yolları
@@ -90,7 +91,7 @@ def analyze_time_series(df, time_column, name="Dataset"):
         df.set_index(time_column, inplace=True)
 
         # Aylık ortalamaları çiz
-        df.resample('ME').mean().plot(figsize=(12, 6), title=f"{name} Monthly Mean")
+        df.resample("ME").mean().plot(figsize=(12, 6), title=f"{name} Monthly Mean")
         plt.xlabel("Tarih")
         plt.ylabel("Ortalama Değerler")
         plt.tight_layout()

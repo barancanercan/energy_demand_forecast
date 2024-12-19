@@ -1,22 +1,24 @@
-import warnings
-import pandas as pd
-import numpy as np
 import os
+import warnings
 from datetime import datetime
+
+import numpy as np
+import pandas as pd
 
 # Tüm uyarıları kapat
 warnings.filterwarnings("ignore")
 
-pd.set_option('display.max_columns', None)
-pd.set_option('display.max_rows', None)
-pd.set_option('display.float_format', lambda x: '%.3f' % x)
-pd.set_option('display.width', 500)
+pd.set_option("display.max_columns", None)
+pd.set_option("display.max_rows", None)
+pd.set_option("display.float_format", lambda x: "%.3f" % x)
+pd.set_option("display.width", 500)
 
 # Dosya yolları
 RAW_DATA_DIR = "./data/raw/"
 PROCESSED_DATA_DIR = "./data/processed/"
 ENERGY_DATA_FILE = os.path.join(RAW_DATA_DIR, "energy_dataset.csv")
 WEATHER_DATA_FILE = os.path.join(RAW_DATA_DIR, "weather_features.csv")
+
 
 def load_data():
     """
@@ -43,17 +45,18 @@ def handle_missing_values(df, threshold=0.5):
     print(f"Orijinal veri boyutu: {df.shape}")
 
     # Tamamen eksik sütunları kaldır
-    df = df.dropna(axis=1, how='all')
+    df = df.dropna(axis=1, how="all")
 
     # Eksik satırları kaldır (eğer oran çok düşükse)
     df = df.dropna(axis=0, thresh=int(df.shape[1] * threshold))
 
     # Eksik değerleri uygun bir şekilde doldur
-    df.fillna(method='ffill', inplace=True)  # İleri doldurma (forward fill)
-    df.fillna(method='bfill', inplace=True)  # Geri doldurma (backward fill)
+    df.fillna(method="ffill", inplace=True)  # İleri doldurma (forward fill)
+    df.fillna(method="bfill", inplace=True)  # Geri doldurma (backward fill)
 
     print(f"İşlem sonrası veri boyutu: {df.shape}")
     return df
+
 
 def create_new_features(df):
     """
@@ -68,18 +71,18 @@ def create_new_features(df):
     print("Yeni özellikler türetiliyor...")
 
     # Tarih bilgisi içeren sütunu datetime formatına çevir
-    if 'time' in df.columns:
-        df['time'] = pd.to_datetime(df['time'], utc=True)
-        df['hour'] = df['time'].dt.hour  # Saat bilgisi
-        df['day_of_week'] = df['time'].dt.dayofweek  # Haftanın günü
-        df['month'] = df['time'].dt.month  # Ay bilgisi
-        df['year'] = df['time'].dt.year  # Yıl bilgisi
-        df['is_weekend'] = df['time'].dt.dayofweek >= 5  # Hafta sonu mu?
-        df['season'] = df['month'].apply(assign_season)  # Mevsim bilgisi
+    if "time" in df.columns:
+        df["time"] = pd.to_datetime(df["time"], utc=True)
+        df["hour"] = df["time"].dt.hour  # Saat bilgisi
+        df["day_of_week"] = df["time"].dt.dayofweek  # Haftanın günü
+        df["month"] = df["time"].dt.month  # Ay bilgisi
+        df["year"] = df["time"].dt.year  # Yıl bilgisi
+        df["is_weekend"] = df["time"].dt.dayofweek >= 5  # Hafta sonu mu?
+        df["season"] = df["month"].apply(assign_season)  # Mevsim bilgisi
 
     # Enerji üretim yüzdeleri
-    if 'total load actual' in df.columns:
-        generation_cols = [col for col in df.columns if 'generation' in col]
+    if "total load actual" in df.columns:
+        generation_cols = [col for col in df.columns if "generation" in col]
         total_generation = df[generation_cols].sum(axis=1)
         for col in generation_cols:
             df[f"{col}_percentage"] = (df[col] / total_generation).fillna(0) * 100
@@ -106,7 +109,7 @@ def detect_and_handle_outliers(df):
     Aykırı değerleri tespit eder ve işleme alır.
     """
     print("Aykırı değerler tespit ediliyor...")
-    numeric_cols = df.select_dtypes(include=['float64', 'int64']).columns
+    numeric_cols = df.select_dtypes(include=["float64", "int64"]).columns
 
     for col in numeric_cols:
         q1 = df[col].quantile(0.25)
@@ -122,11 +125,12 @@ def detect_and_handle_outliers(df):
     print("Aykırı değer işlemleri tamamlandı.")
     return df
 
+
 def outlier_summary(df):
     """
     Aykırı değerlerin sütun bazında sayısını hesaplar.
     """
-    numeric_cols = df.select_dtypes(include=['float64', 'int64']).columns
+    numeric_cols = df.select_dtypes(include=["float64", "int64"]).columns
     outlier_counts = {}
 
     for col in numeric_cols:
@@ -141,9 +145,10 @@ def outlier_summary(df):
         outlier_counts[col] = outliers
 
     # Sonuçları bir DataFrame olarak döndür
-    outlier_summary_df = pd.DataFrame(list(outlier_counts.items()), columns=['Column', 'Outlier Count'])
-    return outlier_summary_df.sort_values(by='Outlier Count', ascending=False)
-
+    outlier_summary_df = pd.DataFrame(
+        list(outlier_counts.items()), columns=["Column", "Outlier Count"]
+    )
+    return outlier_summary_df.sort_values(by="Outlier Count", ascending=False)
 
 
 def save_processed_data(df, file_name):
@@ -194,20 +199,31 @@ def main():
     # Sadeleştirilmiş tabloyu göster
     print("\n=== İşlenmiş Veri Çerçeveleri (Sadeleştirilmiş Görünüm) ===")
     selected_energy_cols = [
-        'time', 'generation biomass', 'generation fossil gas',
-        'generation nuclear', 'total load actual', 'price actual'
+        "time",
+        "generation biomass",
+        "generation fossil gas",
+        "generation nuclear",
+        "total load actual",
+        "price actual",
     ]
     selected_weather_cols = [
-        'dt_iso', 'temp', 'humidity', 'wind_speed',
-        'weather_main', 'weather_description'
+        "dt_iso",
+        "temp",
+        "humidity",
+        "wind_speed",
+        "weather_main",
+        "weather_description",
     ]
 
     simplified_energy_data = energy_data[selected_energy_cols].head()
     simplified_weather_data = weather_data[selected_weather_cols].head()
 
     combined_df = pd.concat(
-        [simplified_energy_data.reset_index(drop=True),
-         simplified_weather_data.reset_index(drop=True)], axis=1
+        [
+            simplified_energy_data.reset_index(drop=True),
+            simplified_weather_data.reset_index(drop=True),
+        ],
+        axis=1,
     )
 
     print(combined_df.to_string(index=False))
